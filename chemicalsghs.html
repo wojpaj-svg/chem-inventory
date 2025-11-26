@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chemical Inventory </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #222;
+      text-align: center;
+    }
+
+    header {
+      background: #8A00C2;
+      color: #fff;
+      padding: 18px 10px;
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    main {
+      max-width: 500px;
+      margin: 30px auto 40px;
+      padding: 0 16px 40px;
+    }
+
+    .search-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 2px solid #8A00C2;
+      border-radius: 10px;
+      padding: 10px 14px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    }
+
+    #search {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      padding: 6px 4px;
+    }
+
+    .results {
+      margin-top: 24px;
+      text-align: left;
+    }
+
+    .result-item {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .chem-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .chem-meta {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    .chem-syn {
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    .no-results {
+      margin-top: 20px;
+      color: #888;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 0.8rem;
+      color: #777;
+    }
+.chem-location {
+  font-weight: 700;
+  font-size: 1.1em;
+  color: #b300b3; /* magenta */
+}
+.chem-name {
+  margin-bottom: 15px; /* większy odstęp pod nazwą */
+}
+.chem-name {
+  font-weight: 700;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+}
+.location-chl {
+  color: #b300b3; /* magenta */
+  font-weight: 700;
+}
+
+.location-elm {
+  color: #008000; /* green */
+  font-weight: 700;
+}
+
+.location-hh {
+  color: #0099ff; /* light blue */
+  font-weight: 700;
+}
+
+    .chem-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    /* Pasek z ikonkami GHS – bez tekstu "GHS:" */
+    .chem-ghs {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    /* Większe ikonki GHS */
+    .ghs-icon {
+      width: 32px;
+      height: auto;
+    }
+
+    .ghs-none {
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+
+    /* ===== WIDOK MOBILNY ===== */
+    @media (max-width: 600px) {
+      header {
+        font-size: 1.1rem;
+        padding: 12px 8px;
+      }
+
+      main {
+        max-width: 100%;
+        margin: 16px auto 24px;
+        padding: 0 10px 24px;
+      }
+
+      .search-wrapper {
+        padding: 8px 10px;
+        border-width: 2px;
+      }
+
+      #search {
+        font-size: 0.95rem;
+      }
+
+      .result-item {
+        padding: 10px 10px;
+        margin-bottom: 8px;
+      }
+
+      .chem-name {
+        font-size: 1rem;
+      }
+
+      /* Location/CAS i GHS jeden pod drugim */
+      .chem-meta-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .chem-ghs {
+        margin-top: 2px;
+      }
+
+      /* trochę mniejsze ikonki GHS na telefonie */
+      .ghs-icon {
+        width: 24px;
+      }
+
+      footer {
+        margin-top: 20px;
+        font-size: 0.75rem;
+      }
+    }
+
+
+  </style>
+</head>
+<body>
+  <header>
+    CHEMICAL INVENTORY 
+  </header>
+
+  <main>
+    <div class="search-wrapper">
+      <input
+        id="search"
+        type="text"
+        placeholder="Search by name, synonym or CAS number…"
+        autocomplete="off"
+      />
+    </div>
+
+    <div id="results" class="results"></div>
+
+    <footer>  • Developed with Viviana • Designed by WP •</footer>
+  </main>
+
+  <script>
+ 
+  /* ========= DANE ========= */
+
+  const data = [
+    { location: "CHL1.1. ", name: "Sodium dodecyl sulfate", synonyms: "Dodecyl sodium sulfate, Dodecyl sulfate sodium salt, Lauryl sulfate sodium salt, SDS, Sodium lauryl sulfate", cas: "151-21-3", ghs: ["GHS02","GHS05","GHS07"] },
+  { location: "CHL1.1. ", name: "Sodium nitrite", synonyms: "", cas: "7632-00-0", ghs: ["GHS03","GHS06","GHS09"] },
+{ location: "CHL1.1. ", name: "sodium nitrate", synonyms: "sodium nitrate", cas: "7631-99-4", ghs:["GHS03","GHS07"] },
+  { location: "CHL1.3. ", name: "Sodium benzoate", synonyms: "Benzoic acid sodium salt", cas: "532-32-1", ghs: ["GHS07"] },
+  { location: "HH1.1. ", name: "Sodium sulfite anhydrous", synonyms: "Sodium sulfite anhydrous", cas: "7757-83-7", ghs: [] },
+  { location: "ELM1.1. ", name: "Sodium hydroxide – pellets ", synonyms: "‘Caustic soda’", cas: "1310-73-2", ghs: ["GHS02","GHS05","GHS07"] },
+  { location: "ELM1.1. ", name: "", synonyms: "‘Caustic soda’", cas: "1310-73-2", ghs: ["GHS03","GHS06","GHS09"] },
+  { location: "ELM1.1. ", name: "", synonyms: "‘Caustic soda’", cas: "1310-73-2", ghs: ["GHS03","GHS07"] },
+  { location: "ELM1.1. ", name: "Sodium sulfate", synonyms: "Sodium sulfate", cas: "7757-82-6", ghs: ["GHS07"] },
+  { location: "ELM1.1. ", name: "Sodium hydrogen carbonate", synonyms: "Sodium bicarbonate", cas: "144-55-8", ghs: [] },
+  { location: "ELM1.1. ", name: "Sodium carbonate", synonyms: "Calcined soda, Carbonic acid disodium salt, Soda ash", cas: "497-19-8", ghs: [] }
+
+
+  ];
+
+  /* ===== LOGIKA WYSZUKIWANIA =====
+     – działa z synonyms jako STRING
+  */
+
+  const searchInput = document.getElementById("search");
+  const resultsDiv = document.getElementById("results");
+
+  function normalize(text) {
+    return text ? text.toString().toLowerCase().trim() : "";
+  }
+
+  function normalizeCAS(text) {
+    // zostawiamy tylko cyfry
+    return text ? text.toString().replace(/[^0-9]/g, "") : "";
+  }
+  
+  function getLocationClass(loc) {
+    if (!loc) return "";
+    const l = loc.toLowerCase();
+
+    if (l.startsWith("chl")) return "location-chl";
+    if (l.startsWith("elm")) return "location-elm";
+    if (l.startsWith("hh"))  return "location-hh";
+
+    return ""; // default: bez specjalnego koloru
+  }
+
+
+
+  function search() {
+    const qRaw = searchInput.value;
+    const q = normalize(qRaw);
+    const qCAS = normalizeCAS(qRaw);
+
+    resultsDiv.innerHTML = "";
+
+    if (!q) {
+      resultsDiv.innerHTML =
+        '<div class="no-results">Start typing to search…</div>';
+      return;
+    }
+
+    const matches = data.filter((item) => {
+      const name = normalize(item.name);
+      const syns = normalize(item.synonyms || "");
+      const cas = item.cas || "";
+      const casNorm = normalizeCAS(cas);
+
+      const matchName = name.includes(q);
+      const matchSyn = syns.includes(q);
+      const matchCAS =
+        cas.toLowerCase().includes(q) ||
+        (qCAS && casNorm.includes(qCAS));
+
+      return matchName || matchSyn || matchCAS;
+    });
+
+    if (matches.length === 0) {
+      resultsDiv.innerHTML =
+        '<div class="no-results">No chemicals found for this query.</div>';
+      return;
+    }
+
+        matches.forEach((item) => {
+      const synText =
+        item.synonyms && item.synonyms.trim()
+          ? item.synonyms
+          : "–";
+
+      // budujemy GHS jako ikonki
+      const ghsIcons =
+        item.ghs && item.ghs.length
+          ? item.ghs
+              .map(
+                (code) =>
+                  `<img src="ghs/${code}.png" alt="${code}" class="ghs-icon">`
+              )
+              .join("")
+          : '<span class="ghs-none">–</span>';
+
+      const div = document.createElement("div");
+      div.className = "result-item";
+      div.innerHTML = `
+        <div class="chem-name">${item.name}</div>
+
+        <div class="chem-meta-row">
+          <div class="chem-meta">
+            <strong>Location:</strong>
+            <span class="${getLocationClass(item.location)}">
+              ${item.location || "–"}
+            </span>
+            &nbsp; | &nbsp;
+            <strong>CAS:</strong> ${item.cas || "–"}
+          </div>
+
+          <div class="chem-ghs">
+            ${ghsIcons}
+          </div>
+        </div>
+
+        <div class="chem-syn">
+          <strong>Synonyms:</strong> ${synText}
+        </div>
+      `;
+      resultsDiv.appendChild(div);
+    });
+
+
+  }
+
+  // live search
+  searchInput.addEventListener("input", search);
+
+  // napis startowy
+  resultsDiv.innerHTML =
+    '<div class="no-results">Start typing to search…</div>';
+
+
+
+</script>
+
+</body>
+</html>
