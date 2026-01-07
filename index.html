@@ -223,14 +223,22 @@
  
   /* ========= DANE ========= */
 
-  const data = [
-    
+ const data = [
+    { location: "CHL1.1. ", name: "Sodium dodecyl sulfate", synonyms: "Dodecyl sodium sulfate, Dodecyl sulfate sodium salt, Lauryl sulfate sodium salt, SDS, Sodium lauryl sulfate", cas: "151-21-3", ghs: ["GHS02","GHS05","GHS07"] },
+  { location: "CHL1.1. ", name: "Sodium nitrite", synonyms: "", cas: "7632-00-0", ghs: ["GHS03","GHS06","GHS09"] },
+{ location: "CHL1.1. ", name: "sodium nitrate", synonyms: "sodium nitrate", cas: "7631-99-4", ghs:["GHS03","GHS07"] },
+  { location: "CHL1.3. ", name: "Sodium benzoate", synonyms: "Benzoic acid sodium salt", cas: "532-32-1", ghs: ["GHS07"] },
+  { location: "HH1.1. ", name: "Sodium sulfite anhydrous", synonyms: "Sodium sulfite anhydrous", cas: "7757-83-7", ghs: [] },
+  { location: "ELM1.1. ", name: "Sodium hydroxide – pellets ", synonyms: "‘Caustic soda’", cas: "1310-73-2", ghs: ["GHS02","GHS05","GHS07"] },
+  { location: "ELM1.1. ", name: "", synonyms: "‘Caustic soda’", cas: "1310-73-2", ghs: ["GHS03","GHS06","GHS09"] },
+  { location: "ELM1.1. ", name: "", synonyms: "‘Caustic soda’", cas: "1310-73-2", ghs: ["GHS03","GHS07"] },
+  { location: "ELM1.1. ", name: "Sodium sulfate", synonyms: "Sodium sulfate", cas: "7757-82-6", ghs: ["GHS07"] },
+  { location: "ELM1.1. ", name: "Sodium hydrogen carbonate", synonyms: "Sodium bicarbonate", cas: "144-55-8", ghs: [] },
+  { location: "ELM1.1. ", name: "Sodium carbonate", synonyms: "Calcined soda, Carbonic acid disodium salt, Soda ash", cas: "497-19-8", ghs: [] }
 
-  { location: "CHL.1.1. ", name: "Sodium dodecyl sulfate", synonyms: "Lauryl sulfatesodium salt, Sodium dodecyl sulphate, Sodium lauryl sulfate, Dodecyl sodium sulfate, Dodecyl sulfatesodium salt, SDS, Sodium dodecyl sulfate ", cas: "151-21-3", ghs: ["GHS02","GHS05","GHS07"] },
-  { location: "CHL.1.1. ", name: "Sodium nitrite", synonyms: "//", cas: "7632-00-0", ghs: ["GHS03","GHS06","GHS09"] },
-  { location: "CHL.1.1. ", name: "Sodium nitrate", synonyms: "//", cas: "7631-99-4", ghs: ["GHS03","GHS07"] },
-  
+
   ];
+
 
   /* ===== LOGIKA WYSZUKIWANIA =====
      – działa z synonyms jako STRING
@@ -355,6 +363,7 @@
 
 </body>
 </html>
+
 
 
 
